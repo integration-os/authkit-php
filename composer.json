@@ -1,6 +1,6 @@
 {
 	"name": "integration-os/authkit-php",
-	"version": "1.1.3",
+	"version": "1.0.0",
 	"type": "library",
 	"autoload": {
 		"psr-4": {
