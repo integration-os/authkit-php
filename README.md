@@ -33,7 +33,7 @@ $response = $authkit->create([
 echo json_encode($response);
 ```
 
-Of if you're using Laravel, you can define a route like below:
+Or if you're using Laravel, you can define a route like below:
 
 ```php
 <?php
