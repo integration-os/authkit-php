@@ -9,11 +9,13 @@ class AuthKit
 {
 	private string $secret;
 	private array $configs;
+	private string $environment;
 
 	function __construct(string $secret, array $configs = [])
 	{
 		$this->secret = $secret;
 		$this->configs = $configs;
+		$this->environment = str_contains($secret, "sk_live_") ? "live" : "test";
 	}
 
 	private function getUrl(string $type): string
@@ -103,7 +105,7 @@ class AuthKit
 	/**
 	 * @throws GuzzleException
 	 */
-	private function getServiceId(): array
+	private function getSessionId(): array
 	{
 		return $this->apiCall("GET", $this->getUrl("get_session_id"));
 	}
@@ -122,7 +124,7 @@ class AuthKit
 			"label" => $event_links["label"],
 			"environment" => str_starts_with($this->secret, "sk_test") ? "test" : "live",
 			"expiresAt" => (time() * 1000) + (5 * 1000 * 60),
-			"sessionId" => $this->getServiceId()['id'],
+			"sessionId" => $this->getSessionId()['id'],
 			"features" => $settings["features"]
 		];
 
@@ -140,7 +142,7 @@ class AuthKit
 
 			$active_connection_definitions = isset($connection_definitions["rows"]) ? array_filter($connection_definitions["rows"], fn ($connection_definition) => $connection_definition["active"]) : [];
 			$connected_platforms = isset($settings["connectedPlatforms"]) ? array_values(array_filter($settings["connectedPlatforms"],
-				fn ($platform) => in_array($platform["connectionDefinitionId"], array_column($active_connection_definitions, "_id")) && $platform["active"])) : [];
+				fn ($platform) => in_array($platform["connectionDefinitionId"], array_column($active_connection_definitions, "_id")) && $platform["active"] && ($this->environment === "live" ? (isset($platform["environment"]) && $platform["environment"] === "live") : ((isset($platform["environment"]) && $platform["environment"] === 'test') || !isset($platform["environment"]))))) : [];
 
 			return $this->createEmbedToken($connected_platforms, $event_link, $settings);
 		} catch (GuzzleException $e) {
