@@ -8,7 +8,7 @@ using [Composer](https://getcomposer.org/).
 With composer:
 
 ```bash
-composer require integration-os/authkit-php 
+composer require integrationos/authkit-php 
 ```
 
 ## Creating a token endpoint
@@ -22,15 +22,15 @@ curl or Postman by making a POST request to http://yourserver.com/endpoint.php.
 
 require "vendor/autoload.php";
 
-use IntegrationOS\AuthKit\AuthKit;
+use IntegrationOS\AuthKitToken\AuthKitToken;
 
-$authkit = new AuthKit("sk_live_12345");
-$response = $authkit->create([
-	"group" => "meaningful-id", // a meaningful identifier (i.e., organizationId)
-	"label" => "Friendly Label", // a human-friendly label (i.e., organizationName)
+$authKitToken = new AuthKitToken("sk_live_12345");
+$token = $authKitToken->create([
+	"group" => "org_123", // a meaningful identifier (i.e., organizationId)
+	"label" => "Acme", // a human-friendly label (i.e., organizationName)
 ]);
 
-echo json_encode($response);
+echo json_encode($token);
 ```
 
 Or if you're using Laravel, you can define a route like below:
@@ -39,24 +39,24 @@ Or if you're using Laravel, you can define a route like below:
 <?php
 
 use Illuminate\Support\Facades\Route;
-use IntegrationOS\AuthKit\AuthKit;
+use IntegrationOS\AuthKitToken\AuthKitToken;
 
-Route::get('/create-embed-token', function () {
-    $authkit = new AuthKit("sk_live_12345");
+Route::get('/authkit-token', function () {
+    $authKitToken = new AuthKitToken("sk_live_12345");
 	
-    $response = $authkit->create([
-        "group" => "meaningful-id", // a meaningful identifier (i.e., organizationId)
-        "label" => "Friendly Label", // a human-friendly label (i.e., organizationName)
+    $token = $authKitToken->create([
+        "group" => "org_123", // a meaningful identifier (i.e., organizationId)
+        "label" => "Acme", // a human-friendly label (i.e., organizationName)
     ]);
     
-    return $response;
+    return $token;
 });
 ```
 
 You'll want to switch out the API Key for your own, which will later tell your frontend which integrations you'd like to
 make available to your users.
 
-You'll also want to populate the `Group` and `Label` fields depending on how you want to organize and query your users'
+You'll also want to populate the `group` and `label` fields depending on how you want to organize and query your users'
 connected accounts. The Group is especially important as it's used to generate the
 unique [Connection Key](https://docs.integrationos.com/docs/setup) for the user once they successfully connect an
 account.
