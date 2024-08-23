@@ -1,11 +1,11 @@
 <?php
 
-namespace IntegrationOS\AuthKit;
+namespace IntegrationOS\AuthKitToken;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 
-class AuthKit
+class AuthKitToken
 {
 	private string $secret;
 	private array $configs;
@@ -22,16 +22,10 @@ class AuthKit
 	{
 		$services_url = $this->configs["base_url"] ?? "https://api.integrationos.com";
 
-		$api_url = str_contains($services_url, "localhost")
-			? "http://localhost:3005"
-			: (str_contains($services_url, "development")
-				? "https://development-api.integrationos.com"
-				: "https://api.integrationos.com");
-
 		return match ($type) {
 			"get_settings" => "$services_url/internal/v1/settings/get",
 			"create_event_link" => "$services_url/internal/v1/event-links/create",
-			"get_connection_definitions" => "$api_url/v1/public/connection-definitions?limit=100",
+			"get_connection_definitions" => "$services_url/v1/public/connection-definitions?limit=100",
 			"create_embed_token" => "$services_url/internal/v1/embed-tokens/create",
 			"get_session_id" => "$services_url/v1/public/generate-id/session_id",
 		};

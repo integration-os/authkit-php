@@ -1,10 +1,10 @@
 {
 	"name": "integrationos/authkit-php",
-	"version": "1.2.0",
+	"version": "1.2.1",
 	"type": "library",
 	"autoload": {
 		"psr-4": {
-			"IntegrationOS\\AuthKit\\": "src/"
+			"IntegrationOS\\AuthKitToken\\": "src/"
 		}
 	},
 	"authors": [
