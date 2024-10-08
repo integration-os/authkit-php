@@ -116,6 +116,8 @@ class AuthKitToken
 			],
 			"group" => $event_links["group"],
 			"label" => $event_links["label"],
+			"identity" => $event_links["identity"],
+			"identityType" => $event_links["identityType"],
 			"environment" => str_starts_with($this->secret, "sk_test") ? "test" : "live",
 			"expiresAt" => (time() * 1000) + (5 * 1000 * 60),
 			"sessionId" => $this->getSessionId()['id'],
